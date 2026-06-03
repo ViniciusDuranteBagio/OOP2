@@ -1,5 +1,6 @@
 package com.aula.oop.app;
 
+import com.aula.oop.app.model.Task;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
