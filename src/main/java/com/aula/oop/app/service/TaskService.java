@@ -26,6 +26,11 @@ public class TaskService {
         return entity;
     }
 
+    public Task lastTask(Task entity) {
+        taskRepository.getLastTask(entity);
+        return entity;
+    }
+
     public Task convertDTOToEntitiy(TaskDTO dto) {
         Task entity = new Task();
         entity.setId(entity.getId());

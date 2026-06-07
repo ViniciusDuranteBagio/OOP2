@@ -33,4 +33,12 @@ public class TaskController {
         TaskResponseDTO responseDTO = taskService.convertEntityToResponseDTO(entity);
         return responseDTO;
     }
+
+    @GetMapping("/last")
+    public  TaskResponseDTO getLastTask(@RequestBody @Valid TaskDTO tarefa) {
+        Task entity = taskService.convertDTOToEntitiy(tarefa);
+        taskService.lastTask(entity);
+        TaskResponseDTO responseDTO = taskService.convertEntityToResponseDTO(entity);
+        return responseDTO;
+    }
 }
