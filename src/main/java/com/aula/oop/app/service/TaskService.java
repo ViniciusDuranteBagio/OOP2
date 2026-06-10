@@ -28,7 +28,6 @@ public class TaskService {
 
     public Task convertDTOToEntity(TaskDTO dto) {
         Task entity = new Task();
-        entity.setId(taskRepository.getId());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setCompleted(dto.getCompleted());

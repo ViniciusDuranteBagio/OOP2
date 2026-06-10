@@ -7,22 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 @Repository
 public class TaskRepository {
-    long id;
-    long lastId;
+    // banco de dados
     private List<Task> tasks = new ArrayList<>();
+
 
     public List<Task> getAllTasks() {
         return tasks;
     }
 
     public Task save(Task entity) {
+        if(tasks.isEmpty()) {
+            entity.setId(Long.valueOf(1));
+        } else {
+            Task ultimaTarefa = tasks.getLast();
+            entity.setId(ultimaTarefa.getId() + 1);
+        }
         tasks.add(entity);
-        entity.setId(lastId);
         return entity;
-
-    }
-
-    public long getId() {
-        return lastId;
     }
 }
