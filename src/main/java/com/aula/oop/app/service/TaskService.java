@@ -21,8 +21,21 @@ public class TaskService {
         return entityToResponseDTO(taskRepository.save(entity));
     }
 
+    public void deletar(Long id) {
+        taskRepository.deleteById(id);
+    }
+
+    public TaskResponseDTO alterar(Long id, TaskDTO tarefaNova) {
+        Task tarefaParaAlterar = taskRepository.findById(id).orElseThrow();
+        tarefaParaAlterar.setTitle(tarefaNova.getTitle());
+        tarefaParaAlterar.setDescription(tarefaNova.getDescription());
+        tarefaParaAlterar.setCompleted(tarefaNova.getCompleted());
+        taskRepository.save(tarefaParaAlterar);
+        return entityToResponseDTO(tarefaParaAlterar);
+    }
+
     public List<TaskResponseDTO> getAllTasks() {
-        return taskRepository.getAllTaks()
+        return taskRepository.findAll()
                 .stream()
                 .map(this::entityToResponseDTO)
                 .toList();
@@ -30,7 +43,6 @@ public class TaskService {
 
     public Task dtoToEntity(TaskDTO dto) {
         Task entity = new Task();
-        entity.setId(taskRepository.getLastId());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setCompleted(dto.getCompleted());
