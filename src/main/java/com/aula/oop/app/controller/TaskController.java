@@ -26,4 +26,15 @@ public class TaskController {
     public TaskResponseDTO createTask(@RequestBody @Valid TaskDTO tarefa) {
         return taskService.createTask(tarefa);
     }
+
+    @PutMapping("/{id}")
+    public TaskResponseDTO updateTask(@PathVariable Long id, @RequestBody @Valid TaskDTO tarefa) {
+        return taskService.updateTask(id, tarefa);
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public void deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+
+    }
 }

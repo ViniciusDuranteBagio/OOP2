@@ -10,7 +10,8 @@ import java.util.List;
 
 @Service
 public class TaskService {
-    TaskRepository taskRepository;
+
+    private final TaskRepository taskRepository;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -22,27 +23,46 @@ public class TaskService {
     }
 
     public List<TaskResponseDTO> getAllTasks() {
-        return taskRepository.getAllTaks()
+        return taskRepository.findAll()
                 .stream()
                 .map(this::entityToResponseDTO)
                 .toList();
     }
 
-    public Task dtoToEntity(TaskDTO dto) {
+    public TaskResponseDTO updateTask(Long id, TaskDTO tarefa) {
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+
+        task.setTitle(tarefa.getTitle());
+        task.setDescription(tarefa.getDescription());
+        task.setCompleted(tarefa.getCompleted());
+
+        return entityToResponseDTO(taskRepository.save(task));
+    }
+
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
+
+    private Task dtoToEntity(TaskDTO dto) {
         Task entity = new Task();
-        entity.setId(taskRepository.getLastId());
+
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setCompleted(dto.getCompleted());
+
         return entity;
     }
 
-    public TaskResponseDTO entityToResponseDTO(Task entity) {
+    private TaskResponseDTO entityToResponseDTO(Task entity) {
         TaskResponseDTO dto = new TaskResponseDTO();
+
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
         dto.setCompleted(entity.getCompleted());
+
         return dto;
     }
 }
