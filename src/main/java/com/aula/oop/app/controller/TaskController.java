@@ -26,4 +26,10 @@ public class TaskController {
     public TaskResponseDTO createTask(@RequestBody @Valid TaskDTO tarefa) {
         return taskService.createTask(tarefa);
     }
+
+    @PutMapping("/{id}")
+    public TaskResponseDTO updateTask(@RequestBody @Valid TaskDTO tarefa) {
+        return taskService.updateTask(tarefa);
+    }
+
 }

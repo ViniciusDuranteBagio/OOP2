@@ -21,6 +21,17 @@ public class TaskService {
         return entityToResponseDTO(taskRepository.save(entity));
     }
 
+    public TaskResponseDTO updateTask(TaskDTO tarefa) {
+        Task entity = dtoToEntity(tarefa);
+        return entityToResponseDTO(taskRepository.save(entity));
+    }
+
+    public TaskResponseDTO deleteTask(TaskDTO tarefa) {
+        Task entity = dtoToEntity(tarefa);
+        return entityToResponseDTO(taskRepository.save(entity));
+    }
+
+
     public List<TaskResponseDTO> getAllTasks() {
         return taskRepository.getAllTaks()
                 .stream()
