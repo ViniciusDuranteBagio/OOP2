@@ -21,11 +21,25 @@ public class TaskService {
         return entityToResponseDTO(taskRepository.save(entity));
     }
 
+    public TaskResponseDTO updateTask(Long id, TaskDTO tarefa) {
+        Task entity = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("tarefa não encontrada"));
+        entity.setTitle(tarefa.getTitle());
+        entity.setDescription(tarefa.getDescription());
+        entity.setCompleted(tarefa.getCompleted());
+        return entityToResponseDTO(taskRepository.save(entity));
+
+    }
+
     public List<TaskResponseDTO> getAllTasks() {
         return taskRepository.getAllTaks()
                 .stream()
                 .map(this::entityToResponseDTO)
                 .toList();
+    }
+
+    public void deleteTask(Long id) {
+       // Task tarefaParaDeletar = taskRepository.findById(id).orElseThrow()
+        taskRepository.deleteById(id);
     }
 
     public Task dtoToEntity(TaskDTO dto) {
