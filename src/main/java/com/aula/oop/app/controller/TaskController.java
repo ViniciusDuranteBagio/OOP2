@@ -5,6 +5,7 @@ import com.aula.oop.app.dto.TaskResponseDTO;
 import com.aula.oop.app.model.Task;
 import com.aula.oop.app.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,12 +27,22 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskResponseDTO createTask(@RequestBody @Valid TaskDTO tarefa) {
-        Task entity = taskService.convertDTOToEntity(tarefa);
+    public TaskResponseDTO createTask(@RequestBody @Valid TaskDTO task) {
+        Task entity = taskService.convertDTOToEntity(task);
         taskService.create(entity);
         TaskResponseDTO responseDTO = taskService.convertEntityToResponseDTO(entity);
         return responseDTO;
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity getIdTask(@PathVariable Long id) {
+        taskService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public Task putTask(@PathVariable @RequestBody @Valid Long id, TaskDTO task) {
+        return taskService.put(id, task);
+    }
 
 }

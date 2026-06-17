@@ -18,7 +18,7 @@ public class TaskService {
     }
 
     public List<Task> getAllTasks() {
-        return taskRepository.getAllTasks();
+        return taskRepository.findAll();
     }
 
     public Task create(Task entity) {
@@ -43,4 +43,14 @@ public class TaskService {
         dto.setDescription(entity.getDescription());
         return dto;
     }
+
+    public void delete(Long id) {
+        taskRepository.delete(id);
+    }
+
+    public Task put(Long id, TaskDTO task) {
+        Task taskToPut = taskRepository.findById(id).orElseThrow();
+        return taskRepository.put(id, task);
+    }
+
 }
