@@ -26,6 +26,11 @@ public class TaskService {
         return entity;
     }
 
+    public Task delete(Task entity) {
+        taskRepository.delete(entity);
+        return null;
+    }
+
     public Task convertDTOToEntity(TaskDTO dto) {
         Task entity = new Task();
         entity.setTitle(dto.getTitle());

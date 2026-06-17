@@ -1,6 +1,10 @@
 package com.aula.oop.app.repository;
 
+import com.aula.oop.app.controller.TaskController;
+import com.aula.oop.app.dto.TaskResponseDTO;
 import com.aula.oop.app.model.Task;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -24,5 +28,9 @@ public class TaskRepository {
         }
         tasks.add(entity);
         return entity;
+    }
+
+    public void delete(Task entity) {
+        for (Task)
     }
 }

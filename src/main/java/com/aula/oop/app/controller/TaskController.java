@@ -5,6 +5,8 @@ import com.aula.oop.app.dto.TaskResponseDTO;
 import com.aula.oop.app.model.Task;
 import com.aula.oop.app.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,5 +35,13 @@ public class TaskController {
         return responseDTO;
     }
 
-
+    @DeleteMapping
+    public TaskResponseDTO deleteTask(TaskDTO tarefa) {
+        Task entity = taskService.convertDTOToEntity(tarefa);
+        taskService.delete(entity);
+        TaskResponseDTO responseDTO = taskService.convertEntityToResponseDTO(entity);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(tarefa);
+    }
 }
