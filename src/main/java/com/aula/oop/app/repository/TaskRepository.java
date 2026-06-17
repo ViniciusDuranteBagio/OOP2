@@ -1,5 +1,6 @@
 package com.aula.oop.app.repository;
 
+import com.aula.oop.app.dto.TaskDTO;
 import com.aula.oop.app.model.Task;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,24 @@ public class TaskRepository {
         }
         tasks.add(entity);
         return entity;
+    }
+    public void deletar(Long id){
+        Task tarefaParaDeletar = null;
+        for(Task entity : tasks){
+            if(entity.getId() == id){
+                tarefaParaDeletar = entity;
+            }
+        }
+        tasks.remove(tarefaParaDeletar);
+    }
+    public Task alterar(Long id, TaskDTO tarefa){
+        for(Task entity : tasks){
+            if(entity.getId() == id){
+                entity.setTitle(tarefa.getTitle());
+                entity.setDescription(tarefa.getDescription());
+                entity.setCompleted(tarefa.getCompleted());
+                return entity;
+            }
+        }
     }
 }

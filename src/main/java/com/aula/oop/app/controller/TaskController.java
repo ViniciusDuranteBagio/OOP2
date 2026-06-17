@@ -33,5 +33,14 @@ public class TaskController {
         return responseDTO;
     }
 
+    @DeleteMapping("/id")
+    public void deletar(@PathVariable Long id){
+        taskService.deletar(id);
+    }
+    @PutMapping("/id")
+    public Task alterar(@PathVariable Long id, @RequestBody TaskDTO tarefa){
+        return taskService.alterar(id, tarefa);
+
+    }
 
 }

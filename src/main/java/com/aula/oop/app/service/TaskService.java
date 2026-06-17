@@ -26,6 +26,13 @@ public class TaskService {
         return entity;
     }
 
+    public void deletar(Long id){
+        taskRepository.deletar(id);
+    }
+    public Task alterar(Long id, TaskDTO tarefa){
+        return taskRepository.alterar(id, tarefa);
+    }
+
     public Task convertDTOToEntity(TaskDTO dto) {
         Task entity = new Task();
         entity.setTitle(dto.getTitle());
