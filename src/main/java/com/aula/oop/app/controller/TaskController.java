@@ -33,5 +33,10 @@ public class TaskController {
         return responseDTO;
     }
 
+    @DeleteMapping("/{id}")
+    public deletebyId (@PathVariable Long id)
+
+
+
 
 }

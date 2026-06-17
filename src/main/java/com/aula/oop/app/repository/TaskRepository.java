@@ -1,28 +1,13 @@
 package com.aula.oop.app.repository;
 
 import com.aula.oop.app.model.Task;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 @Repository
-public class TaskRepository {
-    // banco de dados
-    private List<Task> tasks = new ArrayList<>();
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
-
-    public List<Task> getAllTasks() {
-        return tasks;
-    }
-
-    public Task save(Task entity) {
-        if(tasks.isEmpty()) {
-            entity.setId(Long.valueOf(1));
-        } else {
-            Task ultimaTarefa = tasks.getLast();
-            entity.setId(ultimaTarefa.getId() + 1);
-        }
-        tasks.add(entity);
-        return entity;
-    }
 }

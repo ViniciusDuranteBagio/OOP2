@@ -43,4 +43,8 @@ public class TaskService {
         dto.setDescription(entity.getDescription());
         return dto;
     }
+
+    public void deletebyId (Long id){
+        taskRepository.deletebyId;
+    }
 }
