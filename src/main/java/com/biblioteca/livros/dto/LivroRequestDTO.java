@@ -5,22 +5,22 @@ import java.math.BigDecimal;
 
 public class LivroRequestDTO {
 
-    @NotBlank(message = "O título é obrigatório.")
+    @NotBlank(message = "titulo nao pode ser vazio")
     private String titulo;
 
-    @NotBlank(message = "O autor é obrigatório.")
+    @NotBlank(message = "autor nao pode ser vazio")
     private String autor;
 
-    @NotBlank(message = "O código é obrigatório.")
+    @NotBlank(message = "codigo obrigatorio")
     private String codigo;
 
-    @NotNull(message = "O ano de publicação é obrigatório.")
-    @Min(value = 1000, message = "O ano de publicação deve ser maior ou igual a 1000.")
-    @Max(value = 2026, message = "O ano de publicação não pode ser no futuro.")
+    @NotNull(message = "ano de publicacao obrigatorio")
+    @Min(value = 1000, message = "ano invalido, minimo 1000")
+    @Max(value = 2026, message = "ano invalido, nao pode ser futuro")
     private Integer anoPublicacao;
 
-    @NotNull(message = "O preço é obrigatório.")
-    @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero.")
+    @NotNull(message = "preco obrigatorio")
+    @DecimalMin(value = "0.01", message = "preco deve ser maior que zero")
     private BigDecimal preco;
 
     public LivroRequestDTO() {}
