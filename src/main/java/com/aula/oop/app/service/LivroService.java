@@ -30,7 +30,7 @@ public class LivroService {
     }
 
     public LivroResponseDTO createLivro(LivroDTO dto) {
-        livroRepository.findByCodigo(dto.getCodigo()).ifPresent(l -> { throw new CodigoDuplicadoException(dto.getCodigo()); });
+        livroRepository.findByCodigo(dto.getCodigo()).ifPresent(livro -> { throw new CodigoDuplicadoException(dto.getCodigo()); });
 
         Livro entity = convertDTOToEntity(dto);
         Livro salvo = livroRepository.save(entity);
@@ -40,7 +40,7 @@ public class LivroService {
     public LivroResponseDTO updateLivro(Long id, LivroRequestDTO dto) {
         Livro existente = livroRepository.findById(id).orElseThrow(() -> new LivroNaoEncontradoException(id));
 
-        livroRepository.findByCodigo(dto.getCodigo()).filter(l -> !l.getId().equals(id)).ifPresent(l -> { throw new CodigoDuplicadoException(dto.getCodigo()); });
+        livroRepository.findByCodigo(dto.getCodigo()).filter(livro -> !livro.getId().equals(id)).ifPresent(livro -> { throw new CodigoDuplicadoException(dto.getCodigo()); });
 
         existente.setTitulo(dto.getTitulo());
         existente.setAutor(dto.getAutor());
