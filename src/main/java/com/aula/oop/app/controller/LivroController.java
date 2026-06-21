@@ -33,9 +33,7 @@ public class LivroController {
 
     private final LivroService livroService;
 
-    // ----------------------------------------------------------------
     // POST /livros -> Cadastrar um novo livro
-    // ----------------------------------------------------------------
     @PostMapping
     public ResponseEntity<LivroResponseDTO> cadastrar(
             // @Valid -> ANTES de o metodo ser executado, o Spring valida o
@@ -52,18 +50,14 @@ public class LivroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(livroCriado);
     }
 
-    // ----------------------------------------------------------------
     // GET /livros -> Listar todos os livros
-    // ----------------------------------------------------------------
     @GetMapping
     public ResponseEntity<List<LivroResponseDTO>> listarTodos() {
         List<LivroResponseDTO> livros = livroService.listarTodos();
         return ResponseEntity.ok(livros); // 200 OK
     }
 
-    // ----------------------------------------------------------------
     // GET /livros/{id} -> Buscar um livro pelo ID
-    // ----------------------------------------------------------------
     @GetMapping("/{id}")
     public ResponseEntity<LivroResponseDTO> buscarPorId(
             // @PathVariable extrai o valor "{id}" da URL e injeta no parametro
@@ -75,9 +69,7 @@ public class LivroController {
         return ResponseEntity.ok(livro);
     }
 
-    // ----------------------------------------------------------------
     // PUT /livros/{id} -> Atualizar os dados de um livro
-    // ----------------------------------------------------------------
     @PutMapping("/{id}")
     public ResponseEntity<LivroResponseDTO> atualizar(
             @PathVariable Long id,
@@ -87,9 +79,7 @@ public class LivroController {
         return ResponseEntity.ok(livroAtualizado);
     }
 
-    // ----------------------------------------------------------------
     // DELETE /livros/{id} -> Remover um livro
-    // ----------------------------------------------------------------
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         livroService.remover(id);

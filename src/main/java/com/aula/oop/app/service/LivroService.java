@@ -26,9 +26,7 @@ public class LivroService {
 
     private final LivroRepository livroRepository;
 
-    // ----------------------------------------------------------------
     // CADASTRAR um novo livro (POST /livros)
-    // ----------------------------------------------------------------
     public LivroResponseDTO cadastrar(LivroRequestDTO dto) {
 
         // REGRA DE NEGOCIO: "Não deve ser possível cadastrar dois livros com o mesmo código"
@@ -58,9 +56,7 @@ public class LivroService {
         return toResponseDTO(livroSalvo);
     }
 
-    // ----------------------------------------------------------------
     // LISTAR todos os livros (GET /livros)
-    // ----------------------------------------------------------------
     public List<LivroResponseDTO> listarTodos() {
 
         // findAll() retorna List<Livro> (entidades). Precisamos converter
@@ -72,9 +68,7 @@ public class LivroService {
                 .toList();
     }
 
-    // ----------------------------------------------------------------
     // BUSCAR um livro por ID (GET /livros/{id})
-    // ----------------------------------------------------------------
     public LivroResponseDTO buscarPorId(Long id) {
 
         // REGRA DE NEGOCIO: "Ao buscar por ID, deve ser retornado um erro
@@ -90,9 +84,7 @@ public class LivroService {
         return toResponseDTO(livro);
     }
 
-    // ----------------------------------------------------------------
     // ATUALIZAR um livro existente (PUT /livros/{id})
-    // ----------------------------------------------------------------
     public LivroResponseDTO atualizar(Long id, LivroRequestDTO dto) {
 
         // REGRA DE NEGOCIO: "Ao atualizar, deve ser verificado se o livro
@@ -126,9 +118,7 @@ public class LivroService {
         return toResponseDTO(livroAtualizado);
     }
 
-    // ----------------------------------------------------------------
     // REMOVER um livro (DELETE /livros/{id})
-    // ----------------------------------------------------------------
     public void remover(Long id) {
 
         // Tambem verificamos a existencia antes de deletar, para podermos
@@ -142,9 +132,7 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
 
-    // ----------------------------------------------------------------
     // Metodo auxiliar PRIVADO: converte Entity -> Response DTO
-    // ----------------------------------------------------------------
     // Centralizar essa conversao em um unico metodo evita repetir o mesmo
     // codigo em cadastrar(), listarTodos(), buscarPorId() e atualizar().
     private LivroResponseDTO toResponseDTO(Livro livro) {
