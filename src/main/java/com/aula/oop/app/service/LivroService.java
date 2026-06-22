@@ -4,7 +4,9 @@ import com.aula.oop.app.dto.LivroDTO;
 import com.aula.oop.app.dto.LivroResponseDTO;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,10 +24,11 @@ public class LivroService {
     }
 
     public Livro getLivro(Long id) {
-        return livroRepository.findById(id).orElseThrow();
+        return livroRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Livro não encontrado"));
     }
 
     public Livro create(Livro entity) {
+        entity.setId(null);
         livroRepository.save(entity);
         return entity;
     }
@@ -56,8 +59,13 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
 
-    public Livro put(Long id, LivroDTO livro) {
-        Livro livroToPut = livroRepository.findById(id).orElseThrow();
+    public Livro put(Long id, LivroDTO livroDTO) {
+        Livro livroToPut = livroRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Livro não encontrado"));
+        livroToPut.setTitulo(livroDTO.getTitulo());
+        livroToPut.setPreco(livroDTO.getPreco());
+        livroToPut.setCodigo(livroDTO.getCodigo());
+        livroToPut.setAutor(livroDTO.getAutor());
+        livroToPut.setAnoPublicacao(livroDTO.getAnoPublicacao());
         return livroRepository.save(livroToPut);
     }
 }

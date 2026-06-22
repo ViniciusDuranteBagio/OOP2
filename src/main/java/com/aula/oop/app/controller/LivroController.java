@@ -46,7 +46,7 @@ public class LivroController {
     }
 
     @PutMapping("/{id}")
-    public Livro putLivro(@PathVariable @RequestBody @Valid Long id, LivroDTO livro) {
+    public Livro putLivro(@PathVariable Long id, @RequestBody @Valid LivroDTO livro) {
         return livroService.put(id, livro);
     }
 }
