@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LivroResponseDTO {
-    private long id;
+    private Long id;
     private String titulo;
     private String autor;
     private String codigo;
     private int anoPublicacao;
     private double preco;
 }
-

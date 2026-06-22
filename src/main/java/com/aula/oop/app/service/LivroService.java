@@ -4,7 +4,9 @@ import com.aula.oop.app.dto.LivroDTO;
 import com.aula.oop.app.dto.LivroResponseDTO;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class LivroService {
 
     LivroRepository livroRepository;
 
-    public LivroService(LivroRepository livroRepository){
+    public LivroService(LivroRepository livroRepository) {
         this.livroRepository = livroRepository;
     }
 
@@ -22,15 +24,16 @@ public class LivroService {
     }
 
     public Livro getLivro(Long id) {
-        return livroRepository.findById(id).orElseThrow();
+        return livroRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Livro não encontrado"));
     }
 
     public Livro create(Livro entity) {
+        entity.setId(null);
         livroRepository.save(entity);
         return entity;
     }
 
-    public Livro convertDTOToEntity (LivroDTO dto) {
+    public Livro convertDTOToEntity(LivroDTO dto) {
         Livro entity = new Livro();
         entity.setId(dto.getId());
         entity.setTitulo(dto.getTitulo());
@@ -41,23 +44,28 @@ public class LivroService {
         return entity;
     }
 
-    public LivroResponseDTO convertEntityToResponseDTO (Livro entity) {
+    public LivroResponseDTO convertEntityToResponseDTO(Livro entity) {
         LivroResponseDTO dto = new LivroResponseDTO();
-        entity.setId(entity.getId());
-        entity.setTitulo(entity.getTitulo());
-        entity.setPreco(entity.getPreco());
-        entity.setCodigo(entity.getCodigo());
-        entity.setAutor(entity.getAutor());
-        entity.setAnoPublicacao(entity.getAnoPublicacao());
+        dto.setId(entity.getId());
+        dto.setTitulo(entity.getTitulo());
+        dto.setPreco(entity.getPreco());
+        dto.setCodigo(entity.getCodigo());
+        dto.setAutor(entity.getAutor());
+        dto.setAnoPublicacao(entity.getAnoPublicacao());
         return dto;
     }
 
     public void delete(Long id) {
-
+        livroRepository.deleteById(id);
     }
-    public Livro put(Long id, LivroDTO livro) {
-        Livro livroToPut = livroRepository.findById(id).orElseThrow();
+
+    public Livro put(Long id, LivroDTO livroDTO) {
+        Livro livroToPut = livroRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Livro não encontrado"));
+        livroToPut.setTitulo(livroDTO.getTitulo());
+        livroToPut.setPreco(livroDTO.getPreco());
+        livroToPut.setCodigo(livroDTO.getCodigo());
+        livroToPut.setAutor(livroDTO.getAutor());
+        livroToPut.setAnoPublicacao(livroDTO.getAnoPublicacao());
         return livroRepository.save(livroToPut);
     }
-
 }
