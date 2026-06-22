@@ -14,8 +14,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "livro")
+@Entity //Gerar tabela
+@Table(name = "livro") //Nome tabela
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @Builder
 public class Livro {
 
-    @Id
+    @Id //Gera chave primária
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

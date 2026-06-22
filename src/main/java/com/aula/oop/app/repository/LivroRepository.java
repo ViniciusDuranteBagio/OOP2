@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface LivroRepository extends JpaRepository<Livro, Long> {
 
+    //Cria uma consulta no banco
+
     Optional<Livro> findByCodigo(String codigo);
 
     boolean existsByCodigo(String codigo);
