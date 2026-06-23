@@ -32,14 +32,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleJsonInvalido(HttpMessageNotReadableException ex) {
         return montarCorpo(HttpStatus.BAD_REQUEST,
-                "Corpo da requisição inválido ou mal formatado. Verifique se todos os campos estão no tipo correto.");
+                "Body não está em JSON");
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleTipoInvalidoNaUrl(MethodArgumentTypeMismatchException ex) {
         String mensagem = String.format(
-                "O parâmetro '%s' deveria ser do tipo %s, mas foi informado o valor '%s'.",
+                "O parâmetro '%s' está com uma tipagem incorreta",
                 ex.getName(),
                 ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "desconhecido",
                 ex.getValue()
@@ -55,4 +55,13 @@ public class GlobalExceptionHandler {
         corpo.put("mensagem", mensagem);
         return corpo;
     }
+
+    @ExceptionHandler(CodigoDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> handleCodigoDuplicado(CodigoDuplicadoException ex) {
+        Map<String, String> erro = new HashMap<>();
+        erro.put("mensagem", ex.getMessage());
+        return erro;
+    }
+
 }
