@@ -16,14 +16,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleLivroNaoEncontradoException(LivroNaoEncontradoException ex) {
         Map<String, String> erro = new HashMap<>();
         erro.put("mensagem", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro); // aq status 404
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro); 
     }
 
     @ExceptionHandler(CodigoJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleCodigoDuplicadoException(CodigoJaCadastradoException ex) {
         Map<String, String> erro = new HashMap<>();
         erro.put("mensagem", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro); // aqui 409, dados duplicados
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,6 +34,6 @@ public class GlobalExceptionHandler {
                 erros.put(error.getField(), error.getDefaultMessage())
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros); // 400 bad request
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
     }
 }
