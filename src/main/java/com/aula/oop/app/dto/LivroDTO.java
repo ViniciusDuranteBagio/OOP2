@@ -19,6 +19,7 @@ public class LivroDTO {
     private String codigo;
 
     @NotNull
+    @Min(1)
     @Max(2026)
     private Integer anoPublicacao;
 
