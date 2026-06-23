@@ -1,9 +1,10 @@
 package com.aula.oop.app.service;
 
-import com.aula.oop.app.dto.LivroDTO;
+import com.aula.oop.app.dto.LivroRequestDTO;
+import com.aula.oop.app.dto.LivroResponseDTO;
+import com.aula.oop.app.exceptions.LivroNaoEncontradoException;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
-import com.aula.oop.app.exceptions.LivroNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class LivroService {
     @Autowired
     private LivroRepository repository;
 
-    public LivroDTO cadastrar(LivroDTO dto) {
+    public LivroResponseDTO cadastrar(LivroRequestDTO dto) {
 
         if (repository.existsByCodigo(dto.getCodigo())) {
             throw new RuntimeException("Já existe um livro com esse código.");
@@ -32,15 +33,22 @@ public class LivroService {
 
         livro = repository.save(livro);
 
-        dto.setId(livro.getId());
+        LivroResponseDTO response = new LivroResponseDTO();
 
-        return dto;
+        response.setId(livro.getId());
+        response.setTitulo(livro.getTitulo());
+        response.setAutor(livro.getAutor());
+        response.setCodigo(livro.getCodigo());
+        response.setAnoPublicacao(livro.getAnoPublicacao());
+        response.setPreco(livro.getPreco());
+
+        return response;
     }
 
-    public List<LivroDTO> listar() {
+    public List<LivroResponseDTO> listar() {
 
         return repository.findAll().stream().map(livro -> {
-            LivroDTO dto = new LivroDTO();
+            LivroResponseDTO dto = new LivroResponseDTO();
 
             dto.setId(livro.getId());
             dto.setTitulo(livro.getTitulo());
@@ -51,15 +59,14 @@ public class LivroService {
 
             return dto;
         }).collect(Collectors.toList());
-
     }
 
-    public LivroDTO buscar(Long id) {
+    public LivroResponseDTO buscar(Long id) {
 
         Livro livro = repository.findById(id)
                 .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado."));
 
-        LivroDTO dto = new LivroDTO();
+        LivroResponseDTO dto = new LivroResponseDTO();
 
         dto.setId(livro.getId());
         dto.setTitulo(livro.getTitulo());
@@ -71,7 +78,7 @@ public class LivroService {
         return dto;
     }
 
-    public LivroDTO atualizar(Long id, LivroDTO dto) {
+    public LivroResponseDTO atualizar(Long id, LivroRequestDTO dto) {
 
         Livro livro = repository.findById(id)
                 .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado."));
@@ -82,11 +89,18 @@ public class LivroService {
         livro.setAnoPublicacao(dto.getAnoPublicacao());
         livro.setPreco(dto.getPreco());
 
-        repository.save(livro);
+        livro = repository.save(livro);
 
-        dto.setId(livro.getId());
+        LivroResponseDTO response = new LivroResponseDTO();
 
-        return dto;
+        response.setId(livro.getId());
+        response.setTitulo(livro.getTitulo());
+        response.setAutor(livro.getAutor());
+        response.setCodigo(livro.getCodigo());
+        response.setAnoPublicacao(livro.getAnoPublicacao());
+        response.setPreco(livro.getPreco());
+
+        return response;
     }
 
     public void excluir(Long id) {
@@ -96,5 +110,4 @@ public class LivroService {
 
         repository.delete(livro);
     }
-
 }

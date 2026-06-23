@@ -1,6 +1,7 @@
 package com.aula.oop.app.controller;
 
-import com.aula.oop.app.dto.LivroDTO;
+import com.aula.oop.app.dto.LivroRequestDTO;
+import com.aula.oop.app.dto.LivroResponseDTO;
 import com.aula.oop.app.service.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +16,26 @@ public class LivroController {
     @Autowired
     private LivroService service;
 
-    @PostMapping
-    public LivroDTO cadastrar(@Valid @RequestBody LivroDTO dto) {
+    @PostMapping("/cadastrar")
+    public LivroResponseDTO cadastrar(@Valid @RequestBody LivroRequestDTO dto) {
         return service.cadastrar(dto);
     }
 
     @GetMapping
-    public List<LivroDTO> listar() {
+    public List<LivroResponseDTO> listar() {
         return service.listar();
     }
 
     @GetMapping("/{id}")
-    public LivroDTO buscar(@PathVariable Long id) {
+    public LivroResponseDTO buscar(@PathVariable Long id) {
         return service.buscar(id);
     }
 
     @PutMapping("/{id}")
-    public LivroDTO atualizar(@PathVariable Long id, @Valid @RequestBody LivroDTO dto) {
+    public LivroResponseDTO atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody LivroRequestDTO dto) {
+
         return service.atualizar(id, dto);
     }
 
@@ -39,5 +43,4 @@ public class LivroController {
     public void excluir(@PathVariable Long id) {
         service.excluir(id);
     }
-
 }
