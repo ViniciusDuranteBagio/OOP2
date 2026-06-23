@@ -10,29 +10,47 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(CodigoDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> handleCodigoDuplicado(CodigoDuplicadoException ex) {
+        Map<String, String> erro = new HashMap<>();
+        erro.put("mensagem", ex.getMessage());
+        return erro;
+    }
+
+    @ExceptionHandler(LivroNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleLivroNaoEncontrado(LivroNaoEncontradoException ex) {
+        Map<String, String> erro = new HashMap<>();
+        erro.put("mensagem", ex.getMessage());
+        return erro;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleValidacao(MethodArgumentNotValidException ex) {
-        StringBuilder mensagens = new StringBuilder();
-        ex.getBindingResult().getFieldErrors().forEach(erro ->
-                mensagens.append(erro.getField())
-                        .append(": ")
-                        .append(erro.getDefaultMessage())
-                        .append("; ")
-        );
-        return montarCorpo(HttpStatus.BAD_REQUEST, mensagens.toString());
+        List<String> mensagens = ex.getBindingResult().getFieldErrors().stream()
+                .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
+                .toList();
+
+        Map<String, Object> corpo = new HashMap<>();
+        corpo.put("timestamp", LocalDateTime.now());
+        corpo.put("status", HttpStatus.BAD_REQUEST.value());
+        corpo.put("erro", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        corpo.put("mensagem", mensagens);
+        return corpo;
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleJsonInvalido(HttpMessageNotReadableException ex) {
-        return montarCorpo(HttpStatus.BAD_REQUEST,
-                "Body não está em JSON");
+        return montarCorpo(HttpStatus.BAD_REQUEST, "Body não está em JSON");
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -40,9 +58,7 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleTipoInvalidoNaUrl(MethodArgumentTypeMismatchException ex) {
         String mensagem = String.format(
                 "O parâmetro '%s' está com uma tipagem incorreta",
-                ex.getName(),
-                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "desconhecido",
-                ex.getValue()
+                ex.getName()
         );
         return montarCorpo(HttpStatus.BAD_REQUEST, mensagem);
     }
@@ -55,13 +71,4 @@ public class GlobalExceptionHandler {
         corpo.put("mensagem", mensagem);
         return corpo;
     }
-
-    @ExceptionHandler(CodigoDuplicadoException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> handleCodigoDuplicado(CodigoDuplicadoException ex) {
-        Map<String, String> erro = new HashMap<>();
-        erro.put("mensagem", ex.getMessage());
-        return erro;
-    }
-
 }
