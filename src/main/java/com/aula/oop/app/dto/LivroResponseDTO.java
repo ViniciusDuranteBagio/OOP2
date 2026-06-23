@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 @Builder
 public class LivroResponseDTO {
 
+    //Diz como o cadastro deve sair
+
     private Long id;
     private String titulo;
     private String autor;

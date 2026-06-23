@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 public class Livro {
 
     @Id //Gera chave primária
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Faz o banco gerar o valor do ID automaticamente
     private Long id;
 
     @Column(nullable = false)

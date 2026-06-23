@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface LivroRepository extends JpaRepository<Livro, Long> {
 
-    //Cria uma consulta no banco
+    //Coversa com o banco de dados
+    //JPARepository que tras os metodos para uso do banco de dados
 
     Optional<Livro> findByCodigo(String codigo);
 

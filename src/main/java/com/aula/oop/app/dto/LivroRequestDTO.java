@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class LivroRequestDTO {
 
+    //Diz como o cadastro deve chegar
+
     @NotBlank(message = "O titulo e obrigatorio e nao pode estar vazio")
     private String titulo;
 
