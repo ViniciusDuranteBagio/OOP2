@@ -61,7 +61,6 @@ public class LivroService {
         livroRepository.delete(livro);
     }
 
-    // ------------------- Metodos auxiliares -------------------
 
     private Livro buscarEntidadePorId(Long id) {
         return livroRepository.findById(id)
