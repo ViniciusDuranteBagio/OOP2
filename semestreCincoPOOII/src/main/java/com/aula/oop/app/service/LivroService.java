@@ -24,7 +24,7 @@ public class LivroService {
         LivrosDTO dto = converterRequestParaDTO(requestDTO);
 
         if (repository.existsByCodigo(dto.getCodigo())) {
-            throw new CodigoJaCadastradoException("Já existe um livro com esse código");
+            throw new CodigoJaCadastradoException(dto.getCodigo());
         }
 
         Livros livro = converterDTOParaEntity(dto);
@@ -42,19 +42,19 @@ public class LivroService {
 
     public LivrosResponseDTO buscarPorId(Long id) {
         Livros livro = repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado"));
+                .orElseThrow(() -> new LivroNaoEncontradoException(id));
 
         return converterParaResponseDTO(livro);
     }
 
     public LivrosResponseDTO atualizar(Long id, LivrosRequestDTO requestDTO) {
         Livros livro = repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado"));
+                .orElseThrow(() -> new LivroNaoEncontradoException(id));
 
         LivrosDTO dto = converterRequestParaDTO(requestDTO);
 
         if (!livro.getCodigo().equals(dto.getCodigo()) && repository.existsByCodigo(dto.getCodigo())) {
-            throw new CodigoJaCadastradoException("Já existe um livro com esse código");
+            throw new CodigoJaCadastradoException(dto.getCodigo());
         }
 
         livro.setTitulo(dto.getTitulo());
@@ -69,7 +69,7 @@ public class LivroService {
 
     public void deletar(Long id) {
         Livros livro = repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado"));
+                .orElseThrow(() -> new LivroNaoEncontradoException(id));
 
         repository.delete(livro);
     }
