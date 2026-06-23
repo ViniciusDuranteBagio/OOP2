@@ -24,6 +24,6 @@ public class LivroRequestDTO {
     private Integer anoPublicacao;
 
     @NotNull
-    @DecimalMin(value = "0.0", inclusive = false)
+    @DecimalMin("0.000001")
     private Double preco;
 }
