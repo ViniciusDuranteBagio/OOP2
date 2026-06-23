@@ -15,12 +15,12 @@ public class LivroController {
 
     private final LivroService livroService;
 
-    public LivroController(LivroService livroService) {
+    public LivroController(final LivroService livroService) {
         this.livroService = livroService;
     }
 
     @PostMapping
-    public LivroResponseDTO salvar(@RequestBody @Valid LivroRequestDTO requestDTO) {
+    public LivroResponseDTO salvar(@RequestBody @Valid final LivroRequestDTO requestDTO) {
         return livroService.salvar(requestDTO);
     }
 
@@ -30,19 +30,19 @@ public class LivroController {
     }
 
     @GetMapping("/{id}")
-    public LivroResponseDTO buscarPorId(@PathVariable Long id) {
+    public LivroResponseDTO buscarPorId(@PathVariable("id") final Long id) {
         return livroService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public LivroResponseDTO atualizar(@PathVariable Long id,
-                                      @RequestBody @Valid LivroRequestDTO requestDTO) {
+    public LivroResponseDTO atualizar(@PathVariable("id") final Long id,
+                                      @RequestBody @Valid final LivroRequestDTO requestDTO) {
         return livroService.atualizar(id, requestDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable("id") final Long id) {
         livroService.deletar(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // 204, sucesso mas sem corpo
     }
 }

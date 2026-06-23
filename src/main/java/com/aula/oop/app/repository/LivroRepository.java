@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LivroRepository extends JpaRepository<Livro, Long> {
 
-    boolean existsByCodigo(String codigo);
+    boolean existsByCodigo(String codigo); // verifica se código ja existe
 }

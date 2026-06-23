@@ -19,7 +19,7 @@ public class Livro {
     private String titulo;
     private String autor;
 
-    @Column(unique = true)
+    @Column(unique = true) // esse aqui garante que nn tem 2 livros com mesmo código
     private String codigo;
 
     private Integer anoPublicacao;

@@ -3,7 +3,7 @@ package com.aula.oop.app.service;
 import com.aula.oop.app.dto.LivroDTO;
 import com.aula.oop.app.dto.LivroRequestDTO;
 import com.aula.oop.app.dto.LivroResponseDTO;
-import com.aula.oop.app.exceptions.CodigoJaCadastradoException;
+import com.aula.oop.app.exceptions.CodigoDuplicadoException;
 import com.aula.oop.app.exceptions.LivroNaoEncontradoException;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
@@ -24,7 +24,7 @@ public class LivroService {
         LivroDTO dto = converterRequestParaDTO(requestDTO);
 
         if (repository.existsByCodigo(dto.getCodigo())) {
-            throw new CodigoJaCadastradoException("Já existe um livro com esse código");
+            throw new CodigoDuplicadoException(dto.getCodigo());
         }
 
         Livro livro = converterDTOParaEntity(dto);
@@ -42,19 +42,19 @@ public class LivroService {
 
     public LivroResponseDTO buscarPorId(Long id) {
         Livro livro = repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado"));
+                .orElseThrow(() -> new LivroNaoEncontradoException(id));
 
         return converterParaResponseDTO(livro);
     }
 
     public LivroResponseDTO atualizar(Long id, LivroRequestDTO requestDTO) {
         Livro livro = repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado"));
+                .orElseThrow(() -> new LivroNaoEncontradoException(id));
 
         LivroDTO dto = converterRequestParaDTO(requestDTO);
 
         if (!livro.getCodigo().equals(dto.getCodigo()) && repository.existsByCodigo(dto.getCodigo())) {
-            throw new CodigoJaCadastradoException("Já existe um livro com esse código");
+            throw new CodigoDuplicadoException(dto.getCodigo());
         }
 
         livro.setTitulo(dto.getTitulo());
@@ -69,7 +69,7 @@ public class LivroService {
 
     public void deletar(Long id) {
         Livro livro = repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado"));
+                .orElseThrow(() -> new LivroNaoEncontradoException(id));
 
         repository.delete(livro);
     }

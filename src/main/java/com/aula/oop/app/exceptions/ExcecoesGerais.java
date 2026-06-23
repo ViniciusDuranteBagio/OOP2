@@ -10,20 +10,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class ExcecoesGerais {
 
     @ExceptionHandler(LivroNaoEncontradoException.class)
     public ResponseEntity<Map<String, String>> handleLivroNaoEncontradoException(LivroNaoEncontradoException ex) {
         Map<String, String> erro = new HashMap<>();
         erro.put("mensagem", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro); // aq status 404
     }
 
-    @ExceptionHandler(CodigoJaCadastradoException.class)
-    public ResponseEntity<Map<String, String>> handleCodigoJaCadastradoException(CodigoJaCadastradoException ex) {
+    @ExceptionHandler(CodigoDuplicadoException.class)
+    public ResponseEntity<Map<String, String>> handleCodigoDuplicadoException(CodigoDuplicadoException ex) {
         Map<String, String> erro = new HashMap<>();
         erro.put("mensagem", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro); // aqui 409, dados duplicados
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,6 +34,6 @@ public class GlobalExceptionHandler {
                 erros.put(error.getField(), error.getDefaultMessage())
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros); // 400 bad request
     }
 }
