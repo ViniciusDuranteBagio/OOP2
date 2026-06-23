@@ -1,4 +1,4 @@
-package com.biblioteca.livros.exception;
+package com.aula.oop.app.livros.exception;
 
 public class CodigoDuplicadoException extends RuntimeException {
 

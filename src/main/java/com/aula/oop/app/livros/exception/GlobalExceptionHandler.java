@@ -1,4 +1,4 @@
-package com.biblioteca.livros.exception;
+package com.aula.oop.app.livros.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> erros = new HashMap<>();
+
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             erros.put(fieldError.getField(), fieldError.getDefaultMessage());
         }

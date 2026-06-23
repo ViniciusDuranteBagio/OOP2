@@ -1,8 +1,8 @@
-package com.biblioteca.livros.controller;
+package com.aula.oop.app.livros.controller;
 
-import com.biblioteca.livros.dto.LivroRequestDTO;
-import com.biblioteca.livros.dto.LivroResponseDTO;
-import com.biblioteca.livros.service.LivroService;
+import com.aula.oop.app.livros.dto.LivroRequestDTO;
+import com.aula.oop.app.livros.dto.LivroResponseDTO;
+import com.aula.oop.app.livros.service.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class LivroController {
         this.livroService = livroService;
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     public ResponseEntity<LivroResponseDTO> cadastrar(@Valid @RequestBody LivroRequestDTO dto) {
         LivroResponseDTO response = livroService.cadastrar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -38,7 +38,7 @@ public class LivroController {
 
     @PutMapping("/{id}")
     public ResponseEntity<LivroResponseDTO> atualizar(@PathVariable Long id,
-                                                       @Valid @RequestBody LivroRequestDTO dto) {
+                                                      @Valid @RequestBody LivroRequestDTO dto) {
         return ResponseEntity.ok(livroService.atualizar(id, dto));
     }
 

@@ -1,11 +1,11 @@
-package com.biblioteca.livros.service;
+package com.aula.oop.app.livros.service;
 
-import com.biblioteca.livros.dto.LivroRequestDTO;
-import com.biblioteca.livros.dto.LivroResponseDTO;
-import com.biblioteca.livros.entity.Livro;
-import com.biblioteca.livros.exception.CodigoDuplicadoException;
-import com.biblioteca.livros.exception.LivroNotFoundException;
-import com.biblioteca.livros.repository.LivroRepository;
+import com.aula.oop.app.livros.dto.LivroRequestDTO;
+import com.aula.oop.app.livros.dto.LivroResponseDTO;
+import com.aula.oop.app.livros.entity.Livro;
+import com.aula.oop.app.livros.exception.CodigoDuplicadoException;
+import com.aula.oop.app.livros.exception.LivroNotFoundException;
+import com.aula.oop.app.livros.repository.LivroRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +46,7 @@ public class LivroService {
     public LivroResponseDTO buscarPorId(Long id) {
         Livro livro = livroRepository.findById(id)
                 .orElseThrow(() -> new LivroNotFoundException(id));
+
         return new LivroResponseDTO(livro);
     }
 
@@ -53,7 +54,6 @@ public class LivroService {
         Livro livro = livroRepository.findById(id)
                 .orElseThrow(() -> new LivroNotFoundException(id));
 
-        // Verifica se o novo código pertence a outro livro
         if (livroRepository.existsByCodigoAndIdNot(dto.getCodigo(), id)) {
             throw new CodigoDuplicadoException(dto.getCodigo());
         }

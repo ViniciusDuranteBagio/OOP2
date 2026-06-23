@@ -1,6 +1,6 @@
-package com.biblioteca.livros.repository;
+package com.aula.oop.app.livros.repository;
 
-import com.biblioteca.livros.entity.Livro;
+import com.aula.oop.app.livros.entity.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
