@@ -103,18 +103,7 @@ public class LivroService {
 
     }
 
-    private Livro dtoTOentity(LivroDTO dto){
-        Livro entity = new Livro();
 
-        entity.setTitulo(dto.getTitulo());
-        entity.setAutor(dto.getAutor());
-        entity.setCodigo(dto.getCodigo());
-        entity.setAnoPublicacao(dto.getAnoPublicacao());
-
-        return entity;
-
-
-    }
 
     private LivroResponseDTO entityTOresponseDTO(Livro entity){
         LivroResponseDTO dto = new LivroResponseDTO();
