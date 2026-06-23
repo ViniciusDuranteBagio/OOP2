@@ -1,0 +1,30 @@
+package com.aula.oop.app.dto;
+
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class LivroRequestDTO {
+
+    @NotBlank(message = "O título é obrigatório")
+    private String titulo;
+
+    @NotBlank(message = "O autor é obrigatório")
+    private String autor;
+
+    @NotBlank(message = "O código é obrigatório")
+    private String codigo;
+
+    @NotNull(message = "O ano de publicação é obrigatório")
+    @Min(value = 1200, message = "O ano não pode ser menor que 1200")
+    @Max(value = 2026, message = "O ano não pode ser maior que 2026")
+    private Integer anoPublicacao;
+
+    @NotNull(message = "O preço é obrigatório")
+    @Positive(message = "O preço deve ser maior que zero")
+    private Double preco;
+}
