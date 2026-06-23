@@ -36,7 +36,7 @@ public class Livro {
     private String codigo;
 
     @Column(name = "ano_publicacao", nullable = false)
-    private Integer anoPublicacao;
+        private Integer anoPublicacao;
 
     @Column(nullable = false)
     private BigDecimal preco;

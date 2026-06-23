@@ -4,7 +4,6 @@ import com.aula.oop.app.dto.LivroRequestDTO;
 import com.aula.oop.app.dto.LivroResponseDTO;
 import com.aula.oop.app.service.LivroService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,11 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/livros")
-@RequiredArgsConstructor
+@RequestMapping("/livros")
 public class LivroController {
 
     private final LivroService livroService;
+
+    public LivroController(LivroService livroService) {
+        this.livroService = livroService;
+    }
 
     @PostMapping
     public ResponseEntity<LivroResponseDTO> cadastrar(@Valid @RequestBody LivroRequestDTO dto) {

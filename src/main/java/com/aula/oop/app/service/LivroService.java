@@ -6,20 +6,23 @@ import com.aula.oop.app.exceptions.BusinessException;
 import com.aula.oop.app.exceptions.ResourceNotFoundException;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class LivroService {
 
     private final LivroRepository livroRepository;
 
+    public LivroService(LivroRepository livroRepository) {
+        this.livroRepository = livroRepository;
+    }
+
     public LivroResponseDTO cadastrar(LivroRequestDTO dto) {
         if (livroRepository.existsByCodigo(dto.getCodigo())) {
             throw new BusinessException(
-                    "Já existe um livro cadastrado com o código '" + dto.getCodigo() + "'"
+                    "Ja existe um livro cadastrado com o codigo '" + dto.getCodigo() + "'"
             );
         }
 
@@ -43,23 +46,17 @@ public class LivroService {
     }
 
     public LivroResponseDTO buscarPorId(Long id) {
-        Livro livro = livroRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Livro com id " + id + " não foi encontrado!"
-                ));
+        Livro livro = buscarLivro(id);
         return toResponseDTO(livro);
     }
 
     public LivroResponseDTO atualizar(Long id, LivroRequestDTO dto) {
-        Livro livroExistente = livroRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Livro com id " + id + " não foi encontrado!"
-                ));
+        Livro livroExistente = buscarLivro(id);
 
         boolean codigoMudou = !livroExistente.getCodigo().equals(dto.getCodigo());
         if (codigoMudou && livroRepository.existsByCodigo(dto.getCodigo())) {
             throw new BusinessException(
-                    "Ja existe um livro cadastrado com o código '" + dto.getCodigo() + "'"
+                    "Ja existe um livro cadastrado com o codigo '" + dto.getCodigo() + "'"
             );
         }
 
@@ -74,12 +71,15 @@ public class LivroService {
     }
 
     public void remover(Long id) {
-        if (!livroRepository.existsById(id)) {
-            throw new ResourceNotFoundException(
-                    "Livro com id " + id + " não foi encontrado!"
-            );
-        }
-        livroRepository.deleteById(id);
+        Livro livro = buscarLivro(id);
+        livroRepository.delete(livro);
+    }
+
+    private Livro buscarLivro(Long id) {
+        return livroRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Livro com id " + id + " nao foi encontrado."
+                ));
     }
 
     private LivroResponseDTO toResponseDTO(Livro livro) {
