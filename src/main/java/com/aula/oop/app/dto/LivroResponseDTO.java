@@ -17,7 +17,7 @@ public class LivroResponseDTO {
     private Integer anoPublicacao;
     private Double preco;
 
-    // Construtor que transforma um Livro do banco em um DTO de resposta
+
     public LivroResponseDTO(Livro livro) {
         this.id = livro.getId();
         this.titulo = livro.getTitulo();
