@@ -1,9 +1,10 @@
 package com.aula.oop.app.controller;
 
-import com.aula.oop.app.dto.LivroRequest;
-import com.aula.oop.app.dto.LivroResponse;
+import com.aula.oop.app.dto.LivroRequestDTO;
+import com.aula.oop.app.dto.LivroResponseDTO;
 import com.aula.oop.app.service.LivroService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,42 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/livros")
+@RequestMapping("/api/livros")
+@RequiredArgsConstructor
 public class LivroController {
 
-    private final LivroService service;
-
-    public LivroController(LivroService service) {
-        this.service = service;
-    }
+    private final LivroService livroService;
 
     @PostMapping
-    public ResponseEntity<LivroResponse> cadastrar(@Valid @RequestBody LivroRequest request) {
-        LivroResponse livro = service.salvar(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(livro);
+    public ResponseEntity<LivroResponseDTO> cadastrar(@Valid @RequestBody LivroRequestDTO dto) {
+        LivroResponseDTO livroCriado = livroService.cadastrar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(livroCriado);
     }
 
     @GetMapping
-    public ResponseEntity<List<LivroResponse>> listar() {
-        return ResponseEntity.ok(service.listar());
+    public ResponseEntity<List<LivroResponseDTO>> listarTodos() {
+        return ResponseEntity.ok(livroService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LivroResponse> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscar(id));
+    public ResponseEntity<LivroResponseDTO> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(livroService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LivroResponse> atualizar(
-            @PathVariable Long id,
-            @Valid @RequestBody LivroRequest request
-    ) {
-        return ResponseEntity.ok(service.atualizar(id, request));
+    public ResponseEntity<LivroResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody LivroRequestDTO dto) {
+        return ResponseEntity.ok(livroService.atualizar(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
-        service.deletar(id);
+        livroService.remover(id);
         return ResponseEntity.noContent().build();
     }
+
 }

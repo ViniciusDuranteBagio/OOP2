@@ -1,85 +1,96 @@
 package com.aula.oop.app.service;
 
-import com.aula.oop.app.dto.LivroRequest;
-import com.aula.oop.app.dto.LivroResponse;
-import com.aula.oop.app.exceptions.CodigoDuplicado;
-import com.aula.oop.app.exceptions.LivroNaoEncontrado;
+import com.aula.oop.app.dto.LivroRequestDTO;
+import com.aula.oop.app.dto.LivroResponseDTO;
+import com.aula.oop.app.exceptions.BusinessException;
+import com.aula.oop.app.exceptions.ResourceNotFoundException;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LivroService {
 
-    private final LivroRepository repository;
+    private final LivroRepository livroRepository;
 
-    public LivroService(LivroRepository repository) {
-        this.repository = repository;
-    }
-
-    public LivroResponse salvar(LivroRequest dto) {
-        if (repository.existsByCodigo(dto.getCodigo())) {
-            throw new CodigoDuplicado("Ja existe um livro cadastrado com este codigo.");
+    public LivroResponseDTO cadastrar(LivroRequestDTO dto) {
+        if (livroRepository.existsByCodigo(dto.getCodigo())) {
+            throw new BusinessException(
+                    "Já existe um livro cadastrado com o código '" + dto.getCodigo() + "'"
+            );
         }
 
-        Livro livro = new Livro();
-        copiarDados(dto, livro);
+        Livro livro = Livro.builder()
+                .titulo(dto.getTitulo())
+                .autor(dto.getAutor())
+                .codigo(dto.getCodigo())
+                .anoPublicacao(dto.getAnoPublicacao())
+                .preco(dto.getPreco())
+                .build();
 
-        return converter(repository.save(livro));
+        Livro livroSalvo = livroRepository.save(livro);
+        return toResponseDTO(livroSalvo);
     }
 
-    public List<LivroResponse> listar() {
-        return repository.findAll()
+    public List<LivroResponseDTO> listarTodos() {
+        return livroRepository.findAll()
                 .stream()
-                .map(this::converter)
+                .map(this::toResponseDTO)
                 .toList();
     }
 
-    public LivroResponse buscar(Long id) {
-        Livro livro = buscarEntidadePorId(id);
-        return converter(livro);
+    public LivroResponseDTO buscarPorId(Long id) {
+        Livro livro = livroRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Livro com id " + id + " não foi encontrado!"
+                ));
+        return toResponseDTO(livro);
     }
 
-    public LivroResponse atualizar(Long id, LivroRequest dto) {
-        Livro livro = buscarEntidadePorId(id);
+    public LivroResponseDTO atualizar(Long id, LivroRequestDTO dto) {
+        Livro livroExistente = livroRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Livro com id " + id + " não foi encontrado!"
+                ));
 
-        if (repository.existsByCodigoAndIdNot(dto.getCodigo(), id)) {
-            throw new CodigoDuplicado("Ja existe outro livro cadastrado com este codigo.");
+        boolean codigoMudou = !livroExistente.getCodigo().equals(dto.getCodigo());
+        if (codigoMudou && livroRepository.existsByCodigo(dto.getCodigo())) {
+            throw new BusinessException(
+                    "Ja existe um livro cadastrado com o código '" + dto.getCodigo() + "'"
+            );
         }
 
-        copiarDados(dto, livro);
+        livroExistente.setTitulo(dto.getTitulo());
+        livroExistente.setAutor(dto.getAutor());
+        livroExistente.setCodigo(dto.getCodigo());
+        livroExistente.setAnoPublicacao(dto.getAnoPublicacao());
+        livroExistente.setPreco(dto.getPreco());
 
-        return converter(repository.save(livro));
+        Livro livroAtualizado = livroRepository.save(livroExistente);
+        return toResponseDTO(livroAtualizado);
     }
 
-    public void deletar(Long id) {
-        Livro livro = buscarEntidadePorId(id);
-        repository.delete(livro);
+    public void remover(Long id) {
+        if (!livroRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "Livro com id " + id + " não foi encontrado!"
+            );
+        }
+        livroRepository.deleteById(id);
     }
 
-    private Livro buscarEntidadePorId(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new LivroNaoEncontrado("Livro nao encontrado."));
+    private LivroResponseDTO toResponseDTO(Livro livro) {
+        return LivroResponseDTO.builder()
+                .id(livro.getId())
+                .titulo(livro.getTitulo())
+                .autor(livro.getAutor())
+                .codigo(livro.getCodigo())
+                .anoPublicacao(livro.getAnoPublicacao())
+                .preco(livro.getPreco())
+                .build();
     }
 
-    private void copiarDados(LivroRequest dto, Livro livro) {
-        livro.setTitulo(dto.getTitulo());
-        livro.setAutor(dto.getAutor());
-        livro.setCodigo(dto.getCodigo());
-        livro.setAnoPublicacao(dto.getAnoPublicacao());
-        livro.setPreco(dto.getPreco());
-    }
-
-    private LivroResponse converter(Livro livro) {
-        return new LivroResponse(
-                livro.getId(),
-                livro.getTitulo(),
-                livro.getAutor(),
-                livro.getCodigo(),
-                livro.getAnoPublicacao(),
-                livro.getPreco()
-        );
-    }
 }
