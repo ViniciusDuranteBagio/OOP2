@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/livros")
 public class LivroController {
 
-    @Autowired
     private LivroService service;
 
     @PostMapping("/cadastrar")

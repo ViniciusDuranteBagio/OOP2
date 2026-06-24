@@ -29,7 +29,7 @@ public class LivroRequestDTO {
 
     @NotNull(message = "O ano de publicação do livro é obrigatório")
     @Min(value = 1440, message = "O ano de publicação do livro deve ser maior ou igual a 1440")
-    @Max(value = 2100, message = "O ano de publicação do livro deve ser menor ou igual a 2100")
+    @Max(value = 2026, message = "O ano de publicação do livro deve ser menor ou igual a 2026")
     private Integer anoPublicacao;
 
     @NotNull(message = "O preco do livro é obrigatório")
