@@ -1,6 +1,5 @@
 package com.aula.oop.app.dto;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 

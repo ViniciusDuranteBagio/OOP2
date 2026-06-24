@@ -4,24 +4,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Entity
 public class Livro {
 
     @Id
-    @GeneratedValue(strategy =
-            GenerationType.IDENTITY)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String titulo;
     private String autor;
 
     @Column(unique = true)
     private String codigo;
-    private Integer anoPublicação;
+
+    private Integer anoPublicacao;
     private Double preco;
-
-
 }
-

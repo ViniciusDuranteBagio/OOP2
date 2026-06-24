@@ -1,26 +1,28 @@
 package com.aula.oop.app.dto;
 
-import jakarta.persistence.Column;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class LivroRequestDTO {
 
     //recebe dados do cliente
-
-    private String titulo;
     @NotBlank(message = "Título é obrigatório")
+    private String titulo;
 
-    private String autor;
     @NotBlank(message = "Autor é obrigatório")
+    private String autor;
 
-    private String codigo;
     @NotBlank(message = "Código é obrigatório")
+    private String codigo;
 
-    private Integer anoPublicacao;
     @NotNull( message = "Ano é obrigatório")
-
+    private Integer anoPublicacao;
 
 
     @NotNull( message = "Preço é obrigatório")
