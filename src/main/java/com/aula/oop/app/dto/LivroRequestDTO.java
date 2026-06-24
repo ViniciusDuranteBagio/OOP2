@@ -5,21 +5,21 @@ import jakarta.validation.constraints.*;
 
 public class LivroRequestDTO {
 
-    @NotBlank(message = "O título é obrigatório.")
+    @NotBlank(message = "Você precisa informar um título. ")
     private String titulo;
 
-    @NotBlank(message = "O autor é obrigatório.")
+    @NotBlank(message = "Como vou saber quem lançou esse livro se você não informar um autor?Sou uma API, não uma IA.")
     private String autor;
 
-    @NotBlank(message = "O código é obrigatório.")
+    @NotBlank(message = "O código é obrigatório meu bem.")
     private String codigo;
 
-    @NotNull(message = "O ano de publicação é obrigatório.")
+    @NotNull(message = "Como vou saber em que ano esse livro lançou? Poderia por gentileza informar o ano de publicação?")
     @Min(value = 1000, message = "O ano deve ser maior que 1000.")
-    @Max(value = 2100, message = "O ano deve ser menor que 2100.")
+    @Max(value = 2028, message = "O ano deve ser menor que 2028")
     private Integer anoPublicacao;
 
-    @NotNull(message = "O preço é obrigatório.")
+    @NotNull(message = "O preço é obrigatório.Ou vai querer que o livro saia de graça?")
     @Positive(message = "O preço deve ser maior que zero.")
     private Double preco;
 
