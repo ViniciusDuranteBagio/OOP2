@@ -1,7 +1,11 @@
 package com.aula.oop.app.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "livros", uniqueConstraints = @UniqueConstraint(columnNames = "codigo"))
 public class Livro {
@@ -28,51 +32,4 @@ public class Livro {
         this.preco = preco;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public Integer getAnoPublicacao() {
-        return anoPublicacao;
-    }
-
-    public void setAnoPublicacao(Integer anoPublicacao) {
-        this.anoPublicacao = anoPublicacao;
-    }
-
-    public Double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
-    }
 }
