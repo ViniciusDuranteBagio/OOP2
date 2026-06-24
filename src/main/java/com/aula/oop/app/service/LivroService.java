@@ -2,95 +2,112 @@ package com.aula.oop.app.service;
 
 import com.aula.oop.app.dto.LivroRequestDTO;
 import com.aula.oop.app.dto.LivroResponseDTO;
-import com.aula.oop.app.exceptions.BusinessException;
-import com.aula.oop.app.exceptions.ResourceNotFoundException;
+import com.aula.oop.app.exceptions.LivroNaoEncontradoException;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LivroService {
 
-    private final LivroRepository livroRepository;
-
-    public LivroService(LivroRepository livroRepository) {
-        this.livroRepository = livroRepository;
-    }
+    @Autowired
+    private LivroRepository repository;
 
     public LivroResponseDTO cadastrar(LivroRequestDTO dto) {
-        if (livroRepository.existsByCodigo(dto.getCodigo())) {
-            throw new BusinessException(
-                    "Ja existe um livro cadastrado com o codigo '" + dto.getCodigo() + "'"
-            );
+
+        if (repository.existsByCodigo(dto.getCodigo())) {
+            throw new RuntimeException("Já existe um livro com esse código.");
         }
 
-        Livro livro = Livro.builder()
-                .titulo(dto.getTitulo())
-                .autor(dto.getAutor())
-                .codigo(dto.getCodigo())
-                .anoPublicacao(dto.getAnoPublicacao())
-                .preco(dto.getPreco())
-                .build();
+        Livro livro = new Livro();
 
-        Livro livroSalvo = livroRepository.save(livro);
-        return toResponseDTO(livroSalvo);
+        livro.setTitulo(dto.getTitulo());
+        livro.setAutor(dto.getAutor());
+        livro.setCodigo(dto.getCodigo());
+        livro.setAnoPublicacao(dto.getAnoPublicacao());
+        livro.setPreco(dto.getPreco());
+
+        livro = repository.save(livro);
+
+        LivroResponseDTO response = new LivroResponseDTO();
+
+        response.setId(livro.getId());
+        response.setTitulo(livro.getTitulo());
+        response.setAutor(livro.getAutor());
+        response.setCodigo(livro.getCodigo());
+        response.setAnoPublicacao(livro.getAnoPublicacao());
+        response.setPreco(livro.getPreco());
+
+        return response;
     }
 
-    public List<LivroResponseDTO> listarTodos() {
-        return livroRepository.findAll()
-                .stream()
-                .map(this::toResponseDTO)
-                .toList();
+    public List<LivroResponseDTO> listar() {
+
+        return repository.findAll().stream().map(livro -> {
+            LivroResponseDTO dto = new LivroResponseDTO();
+
+            dto.setId(livro.getId());
+            dto.setTitulo(livro.getTitulo());
+            dto.setAutor(livro.getAutor());
+            dto.setCodigo(livro.getCodigo());
+            dto.setAnoPublicacao(livro.getAnoPublicacao());
+            dto.setPreco(livro.getPreco());
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
-    public LivroResponseDTO buscarPorId(Long id) {
-        Livro livro = buscarLivro(id);
-        return toResponseDTO(livro);
+    public LivroResponseDTO buscar(Long id) {
+
+        Livro livro = repository.findById(id)
+                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado."));
+
+        LivroResponseDTO dto = new LivroResponseDTO();
+
+        dto.setId(livro.getId());
+        dto.setTitulo(livro.getTitulo());
+        dto.setAutor(livro.getAutor());
+        dto.setCodigo(livro.getCodigo());
+        dto.setAnoPublicacao(livro.getAnoPublicacao());
+        dto.setPreco(livro.getPreco());
+
+        return dto;
     }
 
     public LivroResponseDTO atualizar(Long id, LivroRequestDTO dto) {
-        Livro livroExistente = buscarLivro(id);
 
-        boolean codigoMudou = !livroExistente.getCodigo().equals(dto.getCodigo());
-        if (codigoMudou && livroRepository.existsByCodigo(dto.getCodigo())) {
-            throw new BusinessException(
-                    "Ja existe um livro cadastrado com o codigo '" + dto.getCodigo() + "'"
-            );
-        }
+        Livro livro = repository.findById(id)
+                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado."));
 
-        livroExistente.setTitulo(dto.getTitulo());
-        livroExistente.setAutor(dto.getAutor());
-        livroExistente.setCodigo(dto.getCodigo());
-        livroExistente.setAnoPublicacao(dto.getAnoPublicacao());
-        livroExistente.setPreco(dto.getPreco());
+        livro.setTitulo(dto.getTitulo());
+        livro.setAutor(dto.getAutor());
+        livro.setCodigo(dto.getCodigo());
+        livro.setAnoPublicacao(dto.getAnoPublicacao());
+        livro.setPreco(dto.getPreco());
 
-        Livro livroAtualizado = livroRepository.save(livroExistente);
-        return toResponseDTO(livroAtualizado);
+        livro = repository.save(livro);
+
+        LivroResponseDTO response = new LivroResponseDTO();
+
+        response.setId(livro.getId());
+        response.setTitulo(livro.getTitulo());
+        response.setAutor(livro.getAutor());
+        response.setCodigo(livro.getCodigo());
+        response.setAnoPublicacao(livro.getAnoPublicacao());
+        response.setPreco(livro.getPreco());
+
+        return response;
     }
 
-    public void remover(Long id) {
-        Livro livro = buscarLivro(id);
-        livroRepository.delete(livro);
-    }
+    public void excluir(Long id) {
 
-    private Livro buscarLivro(Long id) {
-        return livroRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Livro com id " + id + " nao foi encontrado."
-                ));
-    }
+        Livro livro = repository.findById(id)
+                .orElseThrow(() -> new LivroNaoEncontradoException("Livro não encontrado."));
 
-    private LivroResponseDTO toResponseDTO(Livro livro) {
-        return LivroResponseDTO.builder()
-                .id(livro.getId())
-                .titulo(livro.getTitulo())
-                .autor(livro.getAutor())
-                .codigo(livro.getCodigo())
-                .anoPublicacao(livro.getAnoPublicacao())
-                .preco(livro.getPreco())
-                .build();
+        repository.delete(livro);
     }
-
 }
