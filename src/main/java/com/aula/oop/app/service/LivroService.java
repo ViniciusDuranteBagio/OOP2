@@ -2,8 +2,8 @@ package com.aula.oop.app.service;
 
 import com.aula.oop.app.dto.LivroRequestDTO;
 import com.aula.oop.app.dto.LivroResponseDTO;
-import com.aula.oop.app.exceptions.BusinessException;
-import com.aula.oop.app.exceptions.ResourceNotFoundException;
+import com.aula.oop.app.excecoes.RegraDeNegocioException;
+import com.aula.oop.app.excecoes.RecursoNaoEncontradoException;
 import com.aula.oop.app.model.Livro;
 import com.aula.oop.app.repository.LivroRepository;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,15 @@ public class LivroService {
     public LivroResponseDTO criar(LivroRequestDTO dto) {
         validarAno(dto.getAnoPublicacao());
 
-        repository.findByCodigo(dto.getCodigo()).ifPresent(l -> {
-            throw new BusinessException("Já existe um livro com esse código.");
+        repository.findByCodigo(dto.getCodigo()).ifPresent(livroExistente -> {
+            throw new RegraDeNegocioException("Já existe um livro com esse código.");
         });
 
         Livro livro = new Livro();
         preencherEntidade(livro, dto);
 
-        return toResponse(repository.save(livro));
+        Livro livroSalvo = repository.save(livro);
+        return toResponse(livroSalvo);
     }
 
     public List<LivroResponseDTO> listar() {
@@ -52,13 +53,14 @@ public class LivroService {
 
         repository.findByCodigo(dto.getCodigo()).ifPresent(existente -> {
             if (!existente.getId().equals(id)) {
-                throw new BusinessException("Já existe um livro com esse código.");
+                throw new RegraDeNegocioException("Já existe um livro com esse código.");
             }
         });
 
         preencherEntidade(livro, dto);
 
-        return toResponse(repository.save(livro));
+        Livro livroAtualizado = repository.save(livro);
+        return toResponse(livroAtualizado);
     }
 
     public void remover(Long id) {
@@ -68,7 +70,7 @@ public class LivroService {
 
     private Livro buscarEntidade(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Livro não encontrado."));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado."));
     }
 
     private void preencherEntidade(Livro livro, LivroRequestDTO dto) {
@@ -94,7 +96,7 @@ public class LivroService {
         int anoAtual = Year.now().getValue();
 
         if (ano > anoAtual) {
-            throw new BusinessException("Ano de publicação não pode ser maior que o ano atual.");
+            throw new RegraDeNegocioException("Ano de publicação não pode ser maior que o ano atual.");
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.aula.oop.app.exceptions;
+package com.aula.oop.app.excecoes;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,36 +11,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class TratadorGlobalDeExcecoes {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleNotFound(ResourceNotFoundException ex) {
-        return erro(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    public Map<String, Object> tratarRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
+        return montarErro(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(RegraDeNegocioException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleBusiness(BusinessException ex) {
-        return erro(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    public Map<String, Object> tratarRegraDeNegocio(RegraDeNegocioException ex) {
+        return montarErro(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleValidation(MethodArgumentNotValidException ex) {
+    public Map<String, Object> tratarValidacao(MethodArgumentNotValidException ex) {
         Map<String, Object> body = new HashMap<>();
-        body.put("status", 400);
+        body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("timestamp", LocalDateTime.now());
 
-        Map<String, String> campos = new HashMap<>();
+        Map<String, String> erros = new HashMap<>();
         ex.getBindingResult().getFieldErrors()
-                .forEach(error -> campos.put(error.getField(), error.getDefaultMessage()));
+                .forEach(error -> erros.put(error.getField(), error.getDefaultMessage()));
 
-        body.put("erros", campos);
+        body.put("erros", erros);
         return body;
     }
 
-    private Map<String, Object> erro(int status, String mensagem) {
+    private Map<String, Object> montarErro(int status, String mensagem) {
         Map<String, Object> body = new HashMap<>();
         body.put("status", status);
         body.put("mensagem", mensagem);
