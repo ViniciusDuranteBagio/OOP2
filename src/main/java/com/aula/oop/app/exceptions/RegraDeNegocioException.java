@@ -1,4 +1,4 @@
-package com.aula.oop.app.excecoes;
+package com.aula.oop.app.exceptions;
 
 public class RegraDeNegocioException extends RuntimeException {
 

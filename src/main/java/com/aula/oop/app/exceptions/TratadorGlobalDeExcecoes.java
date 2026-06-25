@@ -1,4 +1,4 @@
-package com.aula.oop.app.excecoes;
+package com.aula.oop.app.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,15 +13,15 @@ import java.util.Map;
 @RestControllerAdvice
 public class TratadorGlobalDeExcecoes {
 
-    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    @ExceptionHandler(com.aula.oop.app.exceptions.RecursoNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> tratarRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
+    public Map<String, Object> tratarRecursoNaoEncontrado(com.aula.oop.app.exceptions.RecursoNaoEncontradoException ex) {
         return montarErro(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
-    @ExceptionHandler(RegraDeNegocioException.class)
+    @ExceptionHandler(com.aula.oop.app.exceptions.RegraDeNegocioException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> tratarRegraDeNegocio(RegraDeNegocioException ex) {
+    public Map<String, Object> tratarRegraDeNegocio(com.aula.oop.app.exceptions.RegraDeNegocioException ex) {
         return montarErro(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
